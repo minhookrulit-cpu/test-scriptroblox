@@ -584,12 +584,10 @@ end
 function VexUI:CreateWindow(config)
     local window = Instance.new("Frame")
     window.Size = config.Size or UDim2.new(0, 500, 0, 400)
-    window.Position = UDim2.new(0.5, -250, 0.5, -200)
+    window.Position = config.Position or UDim2.new(0.5, -250, 0.5, -200)
     window.BackgroundColor3 = self.CurrentTheme.Background
     window.BorderSizePixel = 0
     window.ZIndex = 1
-    window.Active = true
-    window.Draggable = true
 
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 16)
@@ -600,6 +598,26 @@ function VexUI:CreateWindow(config)
     titleBar.BackgroundTransparency = 1
     titleBar.ZIndex = 1
     titleBar.Parent = window
+    titleBar.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            local mouse = game:GetService("UserInputService"):GetMouseLocation()
+            local offset = Vector2.new(mouse.X - window.AbsolutePosition.X, mouse.Y - window.AbsolutePosition.Y)
+            local connection
+            connection = game:GetService("UserInputService").InputChanged:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseMovement then
+                    local newPos = Vector2.new(input.Position.X - offset.X, input.Position.Y - offset.Y)
+                    window.Position = UDim2.new(0, newPos.X, 0, newPos.Y)
+                end
+            end)
+            local releaseConnection
+            releaseConnection = game:GetService("UserInputService").InputEnded:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    connection:Disconnect()
+                    releaseConnection:Disconnect()
+                end
+            end)
+        end
+    end)
 
     local title = Instance.new("TextLabel")
     title.Size = UDim2.new(1, -60, 1, 0)
