@@ -27,6 +27,10 @@ VexUI.DefaultTheme = {
 VexUI.CurrentTheme = nil
 VexUI.Animations = {}
 
+local function getFont(name)
+    return Font.new(VexUI.Fonts[name], Enum.FontStyle.Normal)
+end
+
 function VexUI:SetTheme(theme)
     VexUI.CurrentTheme = {}
     for i, v in pairs(VexUI.DefaultTheme) do
@@ -598,24 +602,29 @@ function VexUI:CreateWindow(config)
     titleBar.BackgroundTransparency = 1
     titleBar.ZIndex = 1
     titleBar.Parent = window
+    
+    local dragging = false
+    local dragInput = nil
+    local dragOffset = Vector2.new()
+    
     titleBar.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            local mouse = game:GetService("UserInputService"):GetMouseLocation()
-            local offset = Vector2.new(mouse.X - window.AbsolutePosition.X, mouse.Y - window.AbsolutePosition.Y)
-            local connection
-            connection = game:GetService("UserInputService").InputChanged:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseMovement then
-                    local newPos = Vector2.new(input.Position.X - offset.X, input.Position.Y - offset.Y)
-                    window.Position = UDim2.new(0, newPos.X, 0, newPos.Y)
-                end
-            end)
-            local releaseConnection
-            releaseConnection = game:GetService("UserInputService").InputEnded:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                    connection:Disconnect()
-                    releaseConnection:Disconnect()
-                end
-            end)
+            dragging = true
+            dragInput = input
+            dragOffset = Vector2.new(window.AbsolutePosition.X, window.AbsolutePosition.Y) - Vector2.new(input.Position.X, input.Position.Y)
+        end
+    end)
+    
+    titleBar.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+        end
+    end)
+    
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
+        if dragging and input == dragInput then
+            local newPos = input.Position + dragOffset
+            window.Position = UDim2.new(0, newPos.X, 0, newPos.Y)
         end
     end)
 
