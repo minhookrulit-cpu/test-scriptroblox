@@ -149,7 +149,11 @@ end
 local function Create(class, props, children)
     local obj = Instance.new(class)
     for k, v in pairs(props or {}) do
-        if k ~= "Parent" then obj[k] = v end
+        if k == "Font" and type(v) == "table" then
+            pcall(function() obj.Font = v end)
+        elseif k ~= "Parent" and v ~= nil then
+            obj[k] = v
+        end
     end
     for _, child in ipairs(children or {}) do
         child.Parent = obj
