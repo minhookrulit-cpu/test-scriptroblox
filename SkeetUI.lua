@@ -58,7 +58,181 @@ function SkeetUI:New(title)
         ResetOnSpawn = false
     })
     
+    -- Create Watermark
+    library:CreateWatermark()
+    
     return library
+end
+
+-- Watermark Constructor
+function SkeetUI:CreateWatermark()
+    local watermark = {}
+    
+    -- Watermark Frame
+    watermark.Frame = CreateInstance("Frame", {
+        Name = "Watermark",
+        Parent = self.ScreenGui,
+        BackgroundColor3 = Colors.Background,
+        BorderSizePixel = 0,
+        Position = UDim2.new(0, 10, 0, 10),
+        Size = UDim2.new(0, 0, 0, 25),
+        AutomaticSize = Enum.AutomaticSize.X,
+        ZIndex = 100
+    })
+    
+    CreateInstance("UIStroke", {
+        Parent = watermark.Frame,
+        Color = Colors.Border,
+        Thickness = 1
+    })
+    
+    CreateInstance("UICorner", {
+        Parent = watermark.Frame,
+        CornerRadius = UDim.new(0, 3)
+    })
+    
+    -- Watermark Text Container
+    local textContainer = CreateInstance("Frame", {
+        Name = "TextContainer",
+        Parent = watermark.Frame,
+        BackgroundTransparency = 1,
+        Size = UDim2.new(1, 0, 1, 0),
+        AutomaticSize = Enum.AutomaticSize.X
+    })
+    
+    CreateInstance("UIPadding", {
+        Parent = textContainer,
+        PaddingLeft = UDim.new(0, 10),
+        PaddingRight = UDim.new(0, 10),
+        PaddingTop = UDim.new(0, 3),
+        PaddingBottom = UDim.new(0, 3)
+    })
+    
+    CreateInstance("UIListLayout", {
+        Parent = textContainer,
+        FillDirection = Enum.FillDirection.Horizontal,
+        HorizontalAlignment = Enum.HorizontalAlignment.Left,
+        VerticalAlignment = Enum.VerticalAlignment.Center,
+        Padding = UDim.new(0, 5)
+    })
+    
+    -- Script Name
+    watermark.ScriptName = CreateInstance("TextLabel", {
+        Name = "ScriptName",
+        Parent = textContainer,
+        BackgroundTransparency = 1,
+        Size = UDim2.new(0, 0, 1, 0),
+        AutomaticSize = Enum.AutomaticSize.X,
+        Font = Enum.Font.GothamBold,
+        Text = self.Title,
+        TextColor3 = Colors.Accent,
+        TextSize = 12,
+        TextXAlignment = Enum.TextXAlignment.Left
+    })
+    
+    -- Separator
+    CreateInstance("TextLabel", {
+        Name = "Separator",
+        Parent = textContainer,
+        BackgroundTransparency = 1,
+        Size = UDim2.new(0, 0, 1, 0),
+        AutomaticSize = Enum.AutomaticSize.X,
+        Font = Enum.Font.Gotham,
+        Text = "|",
+        TextColor3 = Colors.Border,
+        TextSize = 12
+    })
+    
+    -- Username
+    watermark.Username = CreateInstance("TextLabel", {
+        Name = "Username",
+        Parent = textContainer,
+        BackgroundTransparency = 1,
+        Size = UDim2.new(0, 0, 1, 0),
+        AutomaticSize = Enum.AutomaticSize.X,
+        Font = Enum.Font.Gotham,
+        Text = game.Players.LocalPlayer.Name,
+        TextColor3 = Colors.Text,
+        TextSize = 11,
+        TextXAlignment = Enum.TextXAlignment.Left
+    })
+    
+    -- Separator 2
+    CreateInstance("TextLabel", {
+        Name = "Separator2",
+        Parent = textContainer,
+        BackgroundTransparency = 1,
+        Size = UDim2.new(0, 0, 1, 0),
+        AutomaticSize = Enum.AutomaticSize.X,
+        Font = Enum.Font.Gotham,
+        Text = "|",
+        TextColor3 = Colors.Border,
+        TextSize = 12
+    })
+    
+    -- FPS Counter
+    watermark.FPS = CreateInstance("TextLabel", {
+        Name = "FPS",
+        Parent = textContainer,
+        BackgroundTransparency = 1,
+        Size = UDim2.new(0, 0, 1, 0),
+        AutomaticSize = Enum.AutomaticSize.X,
+        Font = Enum.Font.Gotham,
+        Text = "0 fps",
+        TextColor3 = Colors.Text,
+        TextSize = 11,
+        TextXAlignment = Enum.TextXAlignment.Left
+    })
+    
+    -- Separator 3
+    CreateInstance("TextLabel", {
+        Name = "Separator3",
+        Parent = textContainer,
+        BackgroundTransparency = 1,
+        Size = UDim2.new(0, 0, 1, 0),
+        AutomaticSize = Enum.AutomaticSize.X,
+        Font = Enum.Font.Gotham,
+        Text = "|",
+        TextColor3 = Colors.Border,
+        TextSize = 12
+    })
+    
+    -- Ping Counter
+    watermark.Ping = CreateInstance("TextLabel", {
+        Name = "Ping",
+        Parent = textContainer,
+        BackgroundTransparency = 1,
+        Size = UDim2.new(0, 0, 1, 0),
+        AutomaticSize = Enum.AutomaticSize.X,
+        Font = Enum.Font.Gotham,
+        Text = "0ms",
+        TextColor3 = Colors.Text,
+        TextSize = 11,
+        TextXAlignment = Enum.TextXAlignment.Left
+    })
+    
+    -- Update FPS
+    local lastUpdate = tick()
+    local frameCount = 0
+    RunService.RenderStepped:Connect(function()
+        frameCount = frameCount + 1
+        if tick() - lastUpdate >= 1 then
+            watermark.FPS.Text = frameCount .. " fps"
+            frameCount = 0
+            lastUpdate = tick()
+        end
+    end)
+    
+    -- Update Ping
+    spawn(function()
+        while wait(2) do
+            local ping = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+            watermark.Ping.Text = ping
+        end
+    end)
+    
+    self.Watermark = watermark
+    return watermark
 end
 
 -- Window Constructor
