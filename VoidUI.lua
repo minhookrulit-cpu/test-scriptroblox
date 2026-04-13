@@ -4,6 +4,9 @@
 
 local VoidUI = {}
 VoidUI.__index = VoidUI
+VoidUI.__call = function(self, config)
+    return self:CreateWindow(config)
+end
 
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -1225,6 +1228,8 @@ function VoidUI:CreateFree(config)
     return free
 end
 
-return function(config)
-    return VoidUI:CreateWindow(config)
+function VoidUI:GetWindow(config)
+    return self:CreateWindow(config)
 end
+
+return VoidUI
