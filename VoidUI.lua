@@ -1396,12 +1396,8 @@ function VoidUI:CreateFree(config)
     return free
 end
 
-function VoidUI:GetWindow(config)
+function VoidUI:New(config)
     return self:CreateWindow(config)
 end
 
-local function NewVoidUI(config)
-    return VoidUI:CreateWindow(config)
-end
-
-return NewVoidUI
+return VoidUI
