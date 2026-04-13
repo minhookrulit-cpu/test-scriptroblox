@@ -2,183 +2,8 @@
 -- Dark Purple Theme (Fatality Style)
 -- Version 1.0.0
 
-local VoidUI = {}
-VoidUI.__index = VoidUI
-VoidUI.CreateWindow = function(self, config)
-    config = config or {}
-    local Title = config.Title or "VoidUI"
-    local Size = config.Size or UDim2.new(0, 500, 0, 400)
-    local Position = config.Position or UDim2.new(0.5, 0, 0.5, 0)
-    local Draggable = config.Draggable ~= false
-
-    local main = Create("ScreenGui")
-    main.Name = "VoidUI_" .. Title
-    main.DisplayOrder = 999
-    main.IgnoreGuiInset = true
-    main.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-
-    local window = Create("Frame")
-    window.Size = Size
-    window.Position = UDim2.new(Position.X.Scale, Position.X.Offset - Size.X.Offset/2, Position.Y.Scale, Position.Y.Offset - Size.Y.Offset/2)
-    window.BackgroundColor3 = Theme.Background
-    window.BorderSizePixel = 0
-    window.ClipsDescendants = true
-    window.Parent = main
-
-    local corner = Create("UICorner")
-    corner.CornerRadius = UDim.new(0, CornerRadius + 2)
-    corner.Parent = window
-
-    local titleFrame = Create("Frame")
-    titleFrame.Size = UDim2.new(1, 0, 0, 50)
-    titleFrame.BackgroundColor3 = Theme.PanelLight
-    titleFrame.BorderSizePixel = 0
-    titleFrame.Parent = window
-
-    local titleCorner = Create("UICorner")
-    titleCorner.CornerRadius = UDim.new(0, CornerRadius + 2)
-    titleCorner.Parent = titleFrame
-
-    local stroke = Create("UIStroke")
-    stroke.Thickness = 1
-    stroke.Color = Theme.Border
-    stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    stroke.Parent = window
-
-    local titleLabel = CreateLabel(Title, UDim2.new(1, -80, 0, 50), Theme.Text, titleFrame)
-    titleLabel.Position = UDim2.new(0, Padding, 0, 0)
-    titleLabel.TextSize = 16
-
-    local closeBtn = Create("TextButton")
-    closeBtn.Size = UDim2.new(0, 32, 0, 32)
-    closeBtn.Position = UDim2.new(1, -42, 0.5, 0)
-    closeBtn.AnchorPoint = Vector2.new(0.5, 0.5)
-    closeBtn.BackgroundColor3 = Theme.Panel
-    closeBtn.BorderSizePixel = 0
-    closeBtn.Text = "✕"
-    closeBtn.TextColor3 = Theme.TextSecondary
-    closeBtn.AutoButtonColor = false
-    closeBtn.Font = TitleFont
-    closeBtn.TextSize = 14
-    closeBtn.Parent = titleFrame
-
-    local closeCorner = Create("UICorner")
-    closeCorner.CornerRadius = UDim.new(0, 8)
-    closeCorner.Parent = closeBtn
-
-    local miniBtn = Create("TextButton")
-    miniBtn.Size = UDim2.new(0, 32, 0, 32)
-    miniBtn.Position = UDim2.new(1, -78, 0.5, 0)
-    miniBtn.AnchorPoint = Vector2.new(0.5, 0.5)
-    miniBtn.BackgroundColor3 = Theme.Panel
-    miniBtn.BorderSizePixel = 0
-    miniBtn.Text = "─"
-    miniBtn.TextColor3 = Theme.TextSecondary
-    miniBtn.AutoButtonColor = false
-    miniBtn.Font = TitleFont
-    miniBtn.TextSize = 14
-    miniBtn.Parent = titleFrame
-
-    local miniCorner = Create("UICorner")
-    miniCorner.CornerRadius = UDim.new(0, 8)
-    miniCorner.Parent = miniBtn
-
-    local tabFrame = Create("Frame")
-    tabFrame.Size = UDim2.new(1, 0, 0, 44)
-    tabFrame.Position = UDim2.new(0, 0, 0, 50)
-    tabFrame.BackgroundColor3 = Theme.Background
-    tabFrame.BorderSizePixel = 0
-    tabFrame.Parent = window
-
-    local tabStroke = Create("UIStroke")
-    tabStroke.Thickness = 1
-    tabStroke.Color = Theme.Border
-    tabStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    tabStroke.Parent = tabFrame
-
-    local tabList = Create("UIListLayout")
-    tabList.FillDirection = Enum.FillDirection.Horizontal
-    tabList.Padding = UDim.new(0, 4)
-    tabList.HorizontalAlignment = Enum.HorizontalAlignment.Left
-    tabList.VerticalAlignment = Enum.VerticalAlignment.Center
-    tabList.Parent = tabFrame
-
-    local tabPadding = Create("UIPadding")
-    tabPadding.PaddingLeft = UDim.new(0, Padding)
-    tabPadding.PaddingTop = UDim.new(0, 8)
-    tabPadding.Parent = tabFrame
-
-    local contentFrame = Create("Frame")
-    contentFrame.Size = UDim2.new(1, -Padding*2, 1, -130)
-    contentFrame.Position = UDim2.new(0, Padding, 0, 94)
-    contentFrame.BackgroundTransparency = 1
-    contentFrame.BorderSizePixel = 0
-    contentFrame.Parent = window
-
-    local scroll = Create("ScrollingFrame")
-    scroll.Size = UDim2.new(1, 0, 1, 0)
-    scroll.BackgroundTransparency = 1
-    scroll.BorderSizePixel = 0
-    scroll.ScrollBarThickness = 0
-    scroll.ScrollBarImageTransparency = 1
-    scroll.Parent = contentFrame
-
-    local scrollList = Create("UIListLayout")
-    scrollList.Padding = UDim.new(0, Padding)
-    scrollList.Parent = scroll
-
-    local padding2 = Create("UIPadding")
-    padding2.PaddingBottom = UDim.new(0, Padding)
-    padding2.Parent = scroll
-
-    local scrollPadding = Create("UIPadding")
-    scrollPadding.PaddingRight = UDim.new(0, 8)
-    scrollPadding.Parent = scroll
-
-    if Draggable then
-        MakeDraggable(titleFrame, window)
-    end
-
-    closeBtn.MouseButton1Click:Connect(function()
-        Tween(window, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-            Size = UDim2.new(0, 0, 0, 0),
-            Position = UDim2.new(0.5, 0, 0.5, 0),
-            AnchorPoint = Vector2.new(0.5, 0.5)
-        })
-        wait(0.2)
-        main:Destroy()
-    end)
-
-    local minimized = false
-    miniBtn.MouseButton1Click:Connect(function()
-        minimized = not minimized
-        if minimized then
-            Tween(window, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-                Size = UDim2.new(0, Size.X.Offset, 0, 50)
-            })
-        else
-            Tween(window, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-                Size = Size
-            })
-        end
-    end)
-
-    local windowObj = setmetatable({
-        Main = main,
-        Window = window,
-        Scroll = scroll,
-        TabFrame = tabFrame,
-        Tabs = {},
-        CurrentTab = nil
-    }, VoidUI)
-
-    windowObj:OpenTab(Title)
-    return windowObj
-end
-
 local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
 
 local Theme = {
     Background = Color3.fromRGB(13, 13, 13),
@@ -191,7 +16,6 @@ local Theme = {
     Border = Color3.fromRGB(51, 51, 51),
     Success = Color3.fromRGB(34, 197, 94),
     Error = Color3.fromRGB(239, 68, 68),
-    Warning = Color3.fromRGB(234, 179, 8),
 }
 
 local Padding = 12
@@ -209,6 +33,8 @@ local function Tween(obj, info, props)
     tween:Play()
     return tween
 end
+
+local VoidUI = {}
 
 local function MakeDraggable(frame, main)
     local dragging = false
@@ -228,10 +54,6 @@ local function MakeDraggable(frame, main)
             dragStart = input.Position
             startPos = main.Position
             dragInput = input
-
-            local hoverTween = Tween(main, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                AnchorPoint = Vector2.new(0.5, 0.5)
-            })
         end
     end)
 
@@ -251,7 +73,6 @@ end
 local function CreateLabel(text, size, color, parent)
     local label = Create("TextLabel")
     label.Size = size or UDim2.new(1, 0, 0, 20)
-    label.Position = UDim2.new(0, 0, 0, 0)
     label.BackgroundTransparency = 1
     label.Text = text or ""
     label.TextColor3 = color or Theme.Text
@@ -293,7 +114,6 @@ local function CreateInputBg(parent, size)
     input.BorderSizePixel = 0
     input.Text = ""
     input.PlaceholderColor3 = Theme.TextSecondary
-    input.PlaceholderText = ""
     input.Font = Font
     input.TextSize = 14
     input.TextColor3 = Theme.Text
@@ -373,7 +193,7 @@ local function CreateCheckboxBg(parent, size)
     check.Position = UDim2.new(0.5, 0, 0.5, 0)
     check.AnchorPoint = Vector2.new(0.5, 0.5)
     check.BackgroundTransparency = 1
-    check.Image = "http://www.roblox.com/asset/?id=7752724514"
+    check.Image = "rbxassetid://7752724514"
     check.ImageColor3 = Theme.Text
     check.Visible = false
     check.Parent = checkbox
@@ -381,262 +201,10 @@ local function CreateCheckboxBg(parent, size)
     return checkbox, check
 end
 
-local function CreateColorPickerUI(parent)
-    local picker = Create("Frame")
-    picker.Size = UDim2.new(0, 200, 0, 180)
-    picker.BackgroundColor3 = Theme.PanelLight
-    picker.BorderSizePixel = 0
-    picker.Visible = false
-    picker.ZIndex = 100
-    picker.Parent = parent
+local Window = {}
+Window.__index = Window
 
-    local corner = Create("UICorner")
-    corner.CornerRadius = UDim.new(0, CornerRadius)
-    corner.Parent = picker
-
-    local padding = Create("UIPadding")
-    padding.PaddingAll = UDim.new(0, Padding)
-    padding.Parent = picker
-
-    local title = CreateLabel("Pick Color", UDim2.new(1, 0, 0, 20), Theme.Text, picker)
-    title.TextSize = 12
-
-    local hueFrame = Create("Frame")
-    hueFrame.Size = UDim2.new(1, 0, 0, 20)
-    hueFrame.Position = UDim2.new(0, 0, 0, 25)
-    hueFrame.BackgroundColor3 = Color3.new(1, 0, 0)
-    hueFrame.BorderSizePixel = 0
-    hueFrame.Parent = picker
-
-    local hueCorner = Create("UICorner")
-    hueCorner.CornerRadius = UDim.new(0, 4)
-    hueCorner.Parent = hueFrame
-
-    local hueSlider = Create("Frame")
-    hueSlider.Size = UDim2.new(1, 0, 0, 4)
-    hueSlider.Position = UDim2.new(0, 0, 0.5, 0)
-    hueSlider.AnchorPoint = Vector2.new(0, 0.5)
-    hueSlider.BackgroundColor3 = Color3.new(1, 1, 1)
-    hueSlider.BorderSizePixel = 0
-    hueSlider.Parent = hueFrame
-    local hueSliderCorner = Create("UICorner")
-    hueSliderCorner.CornerRadius = UDim.new(0, 2)
-    hueSliderCorner.Parent = hueSlider
-
-    local satFrame = Create("Frame")
-    satFrame.Size = UDim2.new(1, 0, 0, 20)
-    satFrame.Position = UDim2.new(0, 0, 0, 55)
-    satFrame.BackgroundColor3 = Color3.new(1, 0, 0)
-    satFrame.BorderSizePixel = 0
-    satFrame.Parent = picker
-    
-    local satCorner = Create("UICorner")
-    satCorner.CornerRadius = UDim.new(0, 4)
-    satCorner.Parent = satFrame
-
-    local satSlider = Create("Frame")
-    satSlider.Size = UDim2.new(0.5, 0, 0, 4)
-    satSlider.Position = UDim2.new(0, 0, 0.5, 0)
-    satSlider.AnchorPoint = Vector2.new(0, 0.5)
-    satSlider.BackgroundColor3 = Color3.new(1, 1, 1)
-    satSlider.BorderSizePixel = 0
-    satSlider.Parent = satFrame
-    local satSliderCorner = Create("UICorner")
-    satSliderCorner.CornerRadius = UDim.new(0, 2)
-    satSliderCorner.Parent = satSlider
-
-    local preview = Create("Frame")
-    preview.Size = UDim2.new(0, 40, 0, 40)
-    preview.Position = UDim2.new(0, 0, 0, 85)
-    preview.BackgroundColor3 = Color3.new(1, 0, 0)
-    preview.BorderSizePixel = 0
-    preview.Parent = picker
-
-    local previewCorner = Create("UICorner")
-    previewCorner.CornerRadius = UDim.new(0, CornerRadius)
-    previewCorner.Parent = preview
-
-    local saveBtn = CreateButtonBg(picker, UDim2.new(0.5, -6, 0, 30))
-    saveBtn.Size = UDim2.new(0.5, -6, 0, 30)
-    saveBtn.Position = UDim2.new(0.5, 3, 0, 85)
-    saveBtn.Text = "Save"
-
-    return picker, hueFrame, satFrame, preview, saveBtn
-end
-
-function VoidUI:CreateWindow(config)
-    config = config or {}
-    local Title = config.Title or "VoidUI"
-    local Size = config.Size or UDim2.new(0, 500, 0, 400)
-    local Position = config.Position or UDim2.new(0.5, 0, 0.5, 0)
-    local Draggable = config.Draggable ~= false
-
-    local main = Create("ScreenGui")
-    main.Name = "VoidUI_" .. Title
-    main.DisplayOrder = 999
-    main.IgnoreGuiInset = true
-    main.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-
-    local window = Create("Frame")
-    window.Size = Size
-    window.Position = UDim2.new(Position.X.Scale, Position.X.Offset - Size.X.Offset/2, Position.Y.Scale, Position.Y.Offset - Size.Y.Offset/2)
-    window.BackgroundColor3 = Theme.Background
-    window.BorderSizePixel = 0
-    window.ClipsDescendants = true
-    window.Parent = main
-
-    local corner = Create("UICorner")
-    corner.CornerRadius = UDim.new(0, CornerRadius + 2)
-    corner.Parent = window
-
-    local titleFrame = Create("Frame")
-    titleFrame.Size = UDim2.new(1, 0, 0, 50)
-    titleFrame.BackgroundColor3 = Theme.PanelLight
-    titleFrame.BorderSizePixel = 0
-    titleFrame.Parent = window
-
-    local titleCorner = Create("UICorner")
-    titleCorner.CornerRadius = UDim.new(0, CornerRadius + 2)
-    titleCorner.Parent = titleFrame
-
-    local stroke = Create("UIStroke")
-    stroke.Thickness = 1
-    stroke.Color = Theme.Border
-    stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    stroke.Parent = window
-
-    local titleLabel = CreateLabel(Title, UDim2.new(1, -80, 0, 50), Theme.Text, titleFrame)
-    titleLabel.Position = UDim2.new(0, Padding, 0, 0)
-    titleLabel.TextSize = 16
-
-    local closeBtn = Create("TextButton")
-    closeBtn.Size = UDim2.new(0, 32, 0, 32)
-    closeBtn.Position = UDim2.new(1, -42, 0.5, 0)
-    closeBtn.AnchorPoint = Vector2.new(0.5, 0.5)
-    closeBtn.BackgroundColor3 = Theme.Panel
-    closeBtn.BorderSizePixel = 0
-    closeBtn.Text = "✕"
-    closeBtn.TextColor3 = Theme.TextSecondary
-    closeBtn.AutoButtonColor = false
-    closeBtn.Font = TitleFont
-    closeBtn.TextSize = 14
-    closeBtn.Parent = titleFrame
-
-    local closeCorner = Create("UICorner")
-    closeCorner.CornerRadius = UDim.new(0, 8)
-    closeCorner.Parent = closeBtn
-
-    local miniBtn = Create("TextButton")
-    miniBtn.Size = UDim2.new(0, 32, 0, 32)
-    miniBtn.Position = UDim2.new(1, -78, 0.5, 0)
-    miniBtn.AnchorPoint = Vector2.new(0.5, 0.5)
-    miniBtn.BackgroundColor3 = Theme.Panel
-    miniBtn.BorderSizePixel = 0
-    miniBtn.Text = "─"
-    miniBtn.TextColor3 = Theme.TextSecondary
-    miniBtn.AutoButtonColor = false
-    miniBtn.Font = TitleFont
-    miniBtn.TextSize = 14
-    miniBtn.Parent = titleFrame
-
-    local miniCorner = Create("UICorner")
-    miniCorner.CornerRadius = UDim.new(0, 8)
-    miniCorner.Parent = miniBtn
-
-    local tabFrame = Create("Frame")
-    tabFrame.Size = UDim2.new(1, 0, 0, 44)
-    tabFrame.Position = UDim2.new(0, 0, 0, 50)
-    tabFrame.BackgroundColor3 = Theme.Background
-    tabFrame.BorderSizePixel = 0
-    tabFrame.Parent = window
-
-    local tabStroke = Create("UIStroke")
-    tabStroke.Thickness = 1
-    tabStroke.Color = Theme.Border
-    tabStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    tabStroke.Parent = tabFrame
-
-    local tabList = Create("UIListLayout")
-    tabList.FillDirection = Enum.FillDirection.Horizontal
-    tabList.Padding = UDim.new(0, 4)
-    tabList.HorizontalAlignment = Enum.HorizontalAlignment.Left
-    tabList.VerticalAlignment = Enum.VerticalAlignment.Center
-    tabList.Parent = tabFrame
-
-    local tabPadding = Create("UIPadding")
-    tabPadding.PaddingLeft = UDim.new(0, Padding)
-    tabPadding.PaddingTop = UDim.new(0, 8)
-    tabPadding.Parent = tabFrame
-
-    local contentFrame = Create("Frame")
-    contentFrame.Size = UDim2.new(1, -Padding*2, 1, -130)
-    contentFrame.Position = UDim2.new(0, Padding, 0, 94)
-    contentFrame.BackgroundTransparency = 1
-    contentFrame.BorderSizePixel = 0
-    contentFrame.Parent = window
-
-    local scroll = Create("ScrollingFrame")
-    scroll.Size = UDim2.new(1, 0, 1, 0)
-    scroll.BackgroundTransparency = 1
-    scroll.BorderSizePixel = 0
-    scroll.ScrollBarThickness = 0
-    scroll.ScrollBarImageTransparency = 1
-    scroll.Parent = contentFrame
-
-    local scrollList = Create("UIListLayout")
-    scrollList.Padding = UDim.new(0, Padding)
-    scrollList.Parrent = scroll
-
-    local padding2 = Create("UIPadding")
-    padding2.PaddingBottom = UDim.new(0, Padding)
-    padding2.Parent = scroll
-
-    local scrollPadding = Create("UIPadding")
-    scrollPadding.PaddingRight = UDim.new(0, 8)
-    scrollPadding.Parent = scroll
-
-    if Draggable then
-        MakeDraggable(titleFrame, window)
-    end
-
-    closeBtn.MouseButton1Click:Connect(function()
-        Tween(window, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-            Size = UDim2.new(0, 0, 0, 0),
-            Position = UDim2.new(0.5, 0, 0.5, 0),
-            AnchorPoint = Vector2.new(0.5, 0.5)
-        })
-        wait(0.2)
-        main:Destroy()
-    end)
-
-    local minimized = false
-    miniBtn.MouseButton1Click:Connect(function()
-        minimized = not minimized
-        if minimized then
-            Tween(window, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-                Size = UDim2.new(0, Size.X.Offset, 0, 50)
-            })
-        else
-            Tween(window, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-                Size = Size
-            })
-        end
-    end)
-
-    local windowObj = setmetatable({
-        Main = main,
-        Window = window,
-        Scroll = scroll,
-        TabFrame = tabFrame,
-        Tabs = {},
-        CurrentTab = nil
-    }, VoidUI)
-
-    windowObj:OpenTab(Title)
-    return windowObj
-end
-
-function VoidUI:Tab(name)
+function Window:Tab(name)
     local tabBtn = Create("TextButton")
     tabBtn.Size = UDim2.new(0, 0, 0, 28)
     tabBtn.AutomaticSize = Enum.AutomaticSize.X
@@ -671,18 +239,17 @@ function VoidUI:Tab(name)
     table.insert(self.Tabs, {
         Name = name,
         Button = tabBtn,
-        Content = tabContent,
-        Components = {}
+        Content = tabContent
     })
 
     tabBtn.MouseButton1Click:Connect(function()
         self:OpenTab(name)
     end)
 
-    local tabObj = {
+    local tabObj = setmetatable({
         Content = tabContent,
-        Components = {}
-    }
+        Window = self
+    }, {__index = Window})
 
     function tabObj:Toggle(label, default, callback)
         default = default or false
@@ -737,8 +304,8 @@ function VoidUI:Tab(name)
             callback(currentState)
         end)
 
-        local toggleObj = {
-            Set = function(self, state)
+        return {
+            Set = function(_, state)
                 UpdateToggle(state)
                 callback(state)
             end,
@@ -746,8 +313,6 @@ function VoidUI:Tab(name)
                 return currentState
             end
         }
-
-        return toggleObj
     end
 
     function tabObj:Checkbox(label, default, callback)
@@ -791,8 +356,8 @@ function VoidUI:Tab(name)
             callback(currentState)
         end)
 
-        local checkboxObj = {
-            Set = function(self, state)
+        return {
+            Set = function(_, state)
                 UpdateCheckbox(state)
                 callback(state)
             end,
@@ -800,8 +365,6 @@ function VoidUI:Tab(name)
                 return currentState
             end
         }
-
-        return checkboxObj
     end
 
     function tabObj:Button(text, callback, style)
@@ -934,7 +497,7 @@ function VoidUI:Tab(name)
 
         local labelTxt = CreateLabel(label, UDim2.new(1, -40, 0, 20), Theme.Text, sliderFrame)
 
-        local valueLabel = CreateLabel(tostring(value), UDim2.new(0, 40, 0, 20), Theme.TextSecondary, sliderLabel)
+        local valueLabel = CreateLabel(tostring(value), UDim2.new(0, 40, 0, 20), Theme.TextSecondary, sliderFrame)
         valueLabel.Position = UDim2.new(1, -40, 0, 0)
         valueLabel.TextXAlignment = Enum.TextXAlignment.Right
 
@@ -965,7 +528,7 @@ function VoidUI:Tab(name)
         sliderBtn.Position = UDim2.new(fillPercent, 0, 0.5, 0)
         sliderBtn.AnchorPoint = Vector2.new(0.5, 0.5)
         sliderBtn.BackgroundColor3 = Theme.Text
-        sliderBg.BorderSizePixel = 0
+        sliderBtn.BorderSizePixel = 0
         sliderBtn.Parent = sliderBg
 
         local btnCorner = Create("UICorner")
@@ -1009,7 +572,7 @@ function VoidUI:Tab(name)
         end)
 
         return {
-            Set = function(self, val)
+            Set = function(_, val)
                 local percent = (val - min) / (max - min)
                 UpdateSlider(percent)
             end
@@ -1036,7 +599,7 @@ function VoidUI:Tab(name)
         arrow.Position = UDim2.new(1, -12, 0.5, 0)
         arrow.AnchorPoint = Vector2.new(0.5, 0.5)
         arrow.BackgroundTransparency = 1
-        arrow.Image = "http://www.roblox.com/asset/?id=7752724514"
+        arrow.Image = "rbxassetid://7752724514"
         arrow.Rotation = 90
         arrow.ImageColor3 = Theme.TextSecondary
         arrow.Parent = dropdown
@@ -1058,7 +621,6 @@ function VoidUI:Tab(name)
         optionsList.Padding = UDim.new(0, 2)
         optionsList.Parent = optionsFrame
 
-        local optionBtns = {}
         local selectedIndex = default
 
         for i, opt in ipairs(options) do
@@ -1090,25 +652,20 @@ function VoidUI:Tab(name)
                 optBtn.BackgroundTransparency = 1
                 optBtn.TextColor3 = Theme.TextSecondary
             end)
-
-            table.insert(optionBtns, optBtn)
-        end
-
-        local function UpdateDropdown()
-            optionsFrame.Size = UDim2.new(1, 0, 0, #options * 34 - 2)
         end
 
         dropdown.MouseButton1Click:Connect(function()
             optionsFrame.Visible = not optionsFrame.Visible
+            if optionsFrame.Visible then
+                optionsFrame.Size = UDim2.new(1, 0, 0, #options * 34 - 2)
+            end
             Tween(arrow, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                 Rotation = optionsFrame.Visible and -90 or 90
             })
         end)
 
-        UpdateDropdown()
-
         return {
-            Set = function(self, index)
+            Set = function(_, index)
                 selectedIndex = index
                 dropdown.Text = options[index]
                 callback(options[index], index)
@@ -1142,16 +699,60 @@ function VoidUI:Tab(name)
         corner.CornerRadius = UDim.new(0, CornerRadius)
         corner.Parent = preview
 
-        local pickerUI, hueFrame, satFrame, previewFrame, saveBtn = CreateColorPickerUI(pickerFrame)
+        local pickerUI = Create("Frame")
+        pickerUI.Size = UDim2.new(0, 200, 0, 120)
+        pickerUI.Position = UDim2.new(0, 0, 0, 60)
+        pickerUI.BackgroundColor3 = Theme.PanelLight
+        pickerUI.BorderSizePixel = 0
+        pickerUI.Visible = false
+        pickerUI.ZIndex = 100
+        pickerUI.Parent = pickerFrame
+
+        local pickerCorner = Create("UICorner")
+        pickerCorner.CornerRadius = UDim.new(0, CornerRadius)
+        pickerCorner.Parent = pickerUI
+
+        local pickerPadding = Create("UIPadding")
+        pickerPadding.PaddingAll = UDim.new(0, Padding)
+        pickerPadding.Parent = pickerUI
+
+        local title = CreateLabel("Pick Color", UDim2.new(1, 0, 0, 20), Theme.Text, pickerUI)
+        title.TextSize = 12
+
+        local hueFrame = Create("Frame")
+        hueFrame.Size = UDim2.new(1, 0, 0, 20)
+        hueFrame.Position = UDim2.new(0, 0, 0, 25)
+        hueFrame.BackgroundColor3 = Color3.new(1, 0, 0)
+        hueFrame.BorderSizePixel = 0
+        hueFrame.Parent = pickerUI
+
+        local hueCorner = Create("UICorner")
+        hueCorner.CornerRadius = UDim.new(0, 4)
+        hueCorner.Parent = hueFrame
+
+        local satFrame = Create("Frame")
+        satFrame.Size = UDim2.new(1, 0, 0, 20)
+        satFrame.Position = UDim2.new(0, 0, 0, 50)
+        satFrame.BackgroundColor3 = default
+        satFrame.BorderSizePixel = 0
+        satFrame.Parent = pickerUI
+        
+        local satCorner = Create("UICorner")
+        satCorner.CornerRadius = UDim.new(0, 4)
+        satCorner.Parent = satFrame
+
+        local saveBtn = CreateButtonBg(pickerUI, UDim2.new(1, 0, 0, 30))
+        saveBtn.Size = UDim2.new(1, 0, 0, 30)
+        saveBtn.Position = UDim2.new(0, 0, 0, 75)
+        saveBtn.Text = "Save"
 
         local hue, sat = 0, 1
         local currentColor = default
 
-        local function UpdateColor(h, s, v)
-            local color = Color3.fromHSV(h, s, v)
+        local function UpdateColor(h, s)
+            local color = Color3.fromHSV(h, s, 1)
             currentColor = color
             preview.BackgroundColor3 = color
-            previewFrame.BackgroundColor3 = color
             callback(color)
         end
 
@@ -1184,7 +785,7 @@ function VoidUI:Tab(name)
                 hue = percent
                 hueFrame.BackgroundColor3 = Color3.fromHSV(percent, 1, 1)
                 satFrame.BackgroundColor3 = Color3.fromHSV(percent, 1, 1)
-                UpdateColor(hue, sat, 1)
+                UpdateColor(hue, sat)
             end
         end)
 
@@ -1206,19 +807,17 @@ function VoidUI:Tab(name)
                 local relX = input.Position.X - satFrame.AbsolutePosition.X
                 local percent = math.clamp(relX / satFrame.AbsoluteSize.X, 0, 1)
                 sat = percent
-                UpdateColor(hue, sat, 1)
+                UpdateColor(hue, sat)
             end
         end)
 
-        UpdateColor(hue, sat, 1)
+        UpdateColor(hue, sat)
         hueFrame.BackgroundColor3 = Color3.fromHSV(hue, 1, 1)
-        satFrame.BackgroundColor3 = Color3.fromHSV(0, 1, 1)
 
         return {
-            Set = function(self, color)
+            Set = function(_, color)
                 currentColor = color
                 preview.BackgroundColor3 = color
-                previewFrame.BackgroundColor3 = color
                 callback(color)
             end,
             Get = function()
@@ -1263,11 +862,11 @@ function VoidUI:Tab(name)
         fillCorner.Parent = barFill
 
         return {
-            Set = function(self, val)
-                value = math.clamp(val, 0, 100)
-                valueLabel.Text = tostring(value) .. "%"
+            Set = function(_, val)
+                val = math.clamp(val, 0, 100)
+                valueLabel.Text = tostring(val) .. "%"
                 Tween(barFill, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                    Size = UDim2.new(value / 100, 0, 1, 0)
+                    Size = UDim2.new(val / 100, 0, 1, 0)
                 })
             end,
             Get = function()
@@ -1315,7 +914,7 @@ function VoidUI:Tab(name)
     return tabObj
 end
 
-function VoidUI:OpenTab(name)
+function Window:OpenTab(name)
     for _, tab in ipairs(self.Tabs) do
         if tab.Name == name then
             tab.Content.Visible = true
@@ -1330,74 +929,176 @@ function VoidUI:OpenTab(name)
     end
 end
 
-function VoidUI:Notification(message, duration)
-    duration = duration or 3
+function VoidUI:New(config)
+    config = config or {}
+    local Title = config.Title or "VoidUI"
+    local Size = config.Size or UDim2.new(0, 500, 0, 400)
+    local Position = config.Position or UDim2.new(0.5, 0, 0.5, 0)
+    local Draggable = config.Draggable ~= false
 
-    local notif = Create("ScreenGui")
-    notif.Name = "VoidUI_Notification"
-    notif.DisplayOrder = 1000
-    notif.IgnoreGuiInset = true
-    notif.Parent = game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui")
+    local main = Create("ScreenGui")
+    main.Name = "VoidUI_" .. Title
+    main.DisplayOrder = 999
+    main.IgnoreGuiInset = true
+    main.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
 
-    local notifFrame = Create("Frame")
-    notifFrame.Size = UDim2.new(0, 300, 0, 50)
-    notifFrame.Position = UDim2.new(1, -320, 0, 20)
-    notifFrame.BackgroundColor3 = Theme.PanelLight
-    notifFrame.BorderSizePixel = 0
-    notifFrame.Parent = notifFrame
+    local window = Create("Frame")
+    window.Size = Size
+    window.Position = UDim2.new(Position.X.Scale, Position.X.Offset - Size.X.Offset/2, Position.Y.Scale, Position.Y.Offset - Size.Y.Offset/2)
+    window.BackgroundColor3 = Theme.Background
+    window.BorderSizePixel = 0
+    window.ClipsDescendants = true
+    window.Parent = main
 
     local corner = Create("UICorner")
-    corner.CornerRadius = UDim.new(0, CornerRadius)
-    corner.Parent = notifFrame
+    corner.CornerRadius = UDim.new(0, CornerRadius + 2)
+    corner.Parent = window
 
-    local padding = Create("UIPadding")
-    padding.PaddingAll = UDim.new(0, Padding)
-    padding.Parent = notifFrame
+    local titleFrame = Create("Frame")
+    titleFrame.Size = UDim2.new(1, 0, 0, 50)
+    titleFrame.BackgroundColor3 = Theme.PanelLight
+    titleFrame.BorderSizePixel = 0
+    titleFrame.Parent = window
 
-    local label = CreateLabel(message, UDim2.new(1, 0, 0, 26), Theme.Text, notifFrame)
-    label.TextSize = 14
-    label.TextXAlignment = Enum.TextXAlignment.Left
+    local titleCorner = Create("UICorner")
+    titleCorner.CornerRadius = UDim.new(0, CornerRadius + 2)
+    titleCorner.Parent = titleFrame
 
-    local progress = Create("Frame")
-    progress.Size = UDim2.new(1, 0, 0, 2)
-    progress.Position = UDim2.new(0, 0, 1, -2)
-    progress.BackgroundColor3 = Theme.Accent
-    progress.BorderSizePixel = 0
-    progress.Parent = notifFrame
+    local stroke = Create("UIStroke")
+    stroke.Thickness = 1
+    stroke.Color = Theme.Border
+    stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    stroke.Parent = window
 
-    Tween(notifFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        Position = UDim2.new(1, -320, 0, 20)
-    })
+    local titleLabel = CreateLabel(Title, UDim2.new(1, -80, 0, 50), Theme.Text, titleFrame)
+    titleLabel.Position = UDim2.new(0, Padding, 0, 0)
+    titleLabel.TextSize = 16
 
-    wait(0.3)
+    local closeBtn = Create("TextButton")
+    closeBtn.Size = UDim2.new(0, 32, 0, 32)
+    closeBtn.Position = UDim2.new(1, -42, 0.5, 0)
+    closeBtn.AnchorPoint = Vector2.new(0.5, 0.5)
+    closeBtn.BackgroundColor3 = Theme.Panel
+    closeBtn.BorderSizePixel = 0
+    closeBtn.Text = "X"
+    closeBtn.TextColor3 = Theme.TextSecondary
+    closeBtn.AutoButtonColor = false
+    closeBtn.Font = TitleFont
+    closeBtn.TextSize = 14
+    closeBtn.Parent = titleFrame
 
-    Tween(progress, TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {
-        Size = UDim2.new(0, 0, 0, 2)
-    })
+    local closeCorner = Create("UICorner")
+    closeCorner.CornerRadius = UDim.new(0, 8)
+    closeCorner.Parent = closeBtn
 
-    wait(duration)
+    local miniBtn = Create("TextButton")
+    miniBtn.Size = UDim2.new(0, 32, 0, 32)
+    miniBtn.Position = UDim2.new(1, -78, 0.5, 0)
+    miniBtn.AnchorPoint = Vector2.new(0.5, 0.5)
+    miniBtn.BackgroundColor3 = Theme.Panel
+    miniBtn.BorderSizePixel = 0
+    miniBtn.Text = "-"
+    miniBtn.TextColor3 = Theme.TextSecondary
+    miniBtn.AutoButtonColor = false
+    miniBtn.Font = TitleFont
+    miniBtn.TextSize = 14
+    miniBtn.Parent = titleFrame
 
-    Tween(notifFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-        Position = UDim2.new(1, 20, 0, 20)
-    })
+    local miniCorner = Create("UICorner")
+    miniCorner.CornerRadius = UDim.new(0, 8)
+    miniCorner.Parent = miniBtn
 
-    wait(0.3)
-    notif:Destroy()
-end
+    local tabFrame = Create("Frame")
+    tabFrame.Size = UDim2.new(1, 0, 0, 44)
+    tabFrame.Position = UDim2.new(0, 0, 0, 50)
+    tabFrame.BackgroundColor3 = Theme.Background
+    tabFrame.BorderSizePixel = 0
+    tabFrame.Parent = window
 
-function VoidUI:CreateFree(config)
-    config = config or {}
-    local Parent = config.Parent
+    local tabStroke = Create("UIStroke")
+    tabStroke.Thickness = 1
+    tabStroke.Color = Theme.Border
+    tabStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    tabStroke.Parent = tabFrame
 
-    local free = setmetatable({
-        Parent = Parent
-    }, VoidUI)
+    local tabList = Create("UIListLayout")
+    tabList.FillDirection = Enum.FillDirection.Horizontal
+    tabList.Padding = UDim.new(0, 4)
+    tabList.HorizontalAlignment = Enum.HorizontalAlignment.Left
+    tabList.VerticalAlignment = Enum.VerticalAlignment.Center
+    tabList.Parent = tabFrame
 
-    return free
-end
+    local tabPadding = Create("UIPadding")
+    tabPadding.PaddingLeft = UDim.new(0, Padding)
+    tabPadding.PaddingTop = UDim.new(0, 8)
+    tabPadding.Parent = tabFrame
 
-function VoidUI:New(config)
-    return self:CreateWindow(config)
+    local contentFrame = Create("Frame")
+    contentFrame.Size = UDim2.new(1, -Padding*2, 1, -130)
+    contentFrame.Position = UDim2.new(0, Padding, 0, 94)
+    contentFrame.BackgroundTransparency = 1
+    contentFrame.BorderSizePixel = 0
+    contentFrame.Parent = window
+
+    local scroll = Create("ScrollingFrame")
+    scroll.Size = UDim2.new(1, 0, 1, 0)
+    scroll.BackgroundTransparency = 1
+    scroll.BorderSizePixel = 0
+    scroll.ScrollBarThickness = 0
+    scroll.ScrollBarImageTransparency = 1
+    scroll.Parent = contentFrame
+
+    local scrollList = Create("UIListLayout")
+    scrollList.Padding = UDim.new(0, Padding)
+    scrollList.Parent = scroll
+
+    local padding2 = Create("UIPadding")
+    padding2.PaddingBottom = UDim.new(0, Padding)
+    padding2.Parent = scroll
+
+    local scrollPadding = Create("UIPadding")
+    scrollPadding.PaddingRight = UDim.new(0, 8)
+    scrollPadding.Parent = scroll
+
+    if Draggable then
+        MakeDraggable(titleFrame, window)
+    end
+
+    closeBtn.MouseButton1Click:Connect(function()
+        Tween(window, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+            Size = UDim2.new(0, 0, 0, 0),
+            Position = UDim2.new(0.5, 0, 0.5, 0),
+            AnchorPoint = Vector2.new(0.5, 0.5)
+        })
+        wait(0.2)
+        main:Destroy()
+    end)
+
+    local minimized = false
+    miniBtn.MouseButton1Click:Connect(function()
+        minimized = not minimized
+        if minimized then
+            Tween(window, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+                Size = UDim2.new(0, Size.X.Offset, 0, 50)
+            })
+        else
+            Tween(window, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+                Size = Size
+            })
+        end
+    end)
+
+    local windowObj = setmetatable({
+        Main = main,
+        Window = window,
+        Scroll = scroll,
+        TabFrame = tabFrame,
+        Tabs = {},
+        CurrentTab = nil
+    }, {__index = Window})
+
+    windowObj:OpenTab(Title)
+    return windowObj
 end
 
 return VoidUI
