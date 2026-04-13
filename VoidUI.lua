@@ -4,8 +4,176 @@
 
 local VoidUI = {}
 VoidUI.__index = VoidUI
-VoidUI.__call = function(self, config)
-    return self:CreateWindow(config)
+VoidUI.CreateWindow = function(self, config)
+    config = config or {}
+    local Title = config.Title or "VoidUI"
+    local Size = config.Size or UDim2.new(0, 500, 0, 400)
+    local Position = config.Position or UDim2.new(0.5, 0, 0.5, 0)
+    local Draggable = config.Draggable ~= false
+
+    local main = Create("ScreenGui")
+    main.Name = "VoidUI_" .. Title
+    main.DisplayOrder = 999
+    main.IgnoreGuiInset = true
+    main.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+
+    local window = Create("Frame")
+    window.Size = Size
+    window.Position = UDim2.new(Position.X.Scale, Position.X.Offset - Size.X.Offset/2, Position.Y.Scale, Position.Y.Offset - Size.Y.Offset/2)
+    window.BackgroundColor3 = Theme.Background
+    window.BorderSizePixel = 0
+    window.ClipsDescendants = true
+    window.Parent = main
+
+    local corner = Create("UICorner")
+    corner.CornerRadius = UDim.new(0, CornerRadius + 2)
+    corner.Parent = window
+
+    local titleFrame = Create("Frame")
+    titleFrame.Size = UDim2.new(1, 0, 0, 50)
+    titleFrame.BackgroundColor3 = Theme.PanelLight
+    titleFrame.BorderSizePixel = 0
+    titleFrame.Parent = window
+
+    local titleCorner = Create("UICorner")
+    titleCorner.CornerRadius = UDim.new(0, CornerRadius + 2)
+    titleCorner.Parent = titleFrame
+
+    local stroke = Create("UIStroke")
+    stroke.Thickness = 1
+    stroke.Color = Theme.Border
+    stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    stroke.Parent = window
+
+    local titleLabel = CreateLabel(Title, UDim2.new(1, -80, 0, 50), Theme.Text, titleFrame)
+    titleLabel.Position = UDim2.new(0, Padding, 0, 0)
+    titleLabel.TextSize = 16
+
+    local closeBtn = Create("TextButton")
+    closeBtn.Size = UDim2.new(0, 32, 0, 32)
+    closeBtn.Position = UDim2.new(1, -42, 0.5, 0)
+    closeBtn.AnchorPoint = Vector2.new(0.5, 0.5)
+    closeBtn.BackgroundColor3 = Theme.Panel
+    closeBtn.BorderSizePixel = 0
+    closeBtn.Text = "✕"
+    closeBtn.TextColor3 = Theme.TextSecondary
+    closeBtn.AutoButtonColor = false
+    closeBtn.Font = TitleFont
+    closeBtn.TextSize = 14
+    closeBtn.Parent = titleFrame
+
+    local closeCorner = Create("UICorner")
+    closeCorner.CornerRadius = UDim.new(0, 8)
+    closeCorner.Parent = closeBtn
+
+    local miniBtn = Create("TextButton")
+    miniBtn.Size = UDim2.new(0, 32, 0, 32)
+    miniBtn.Position = UDim2.new(1, -78, 0.5, 0)
+    miniBtn.AnchorPoint = Vector2.new(0.5, 0.5)
+    miniBtn.BackgroundColor3 = Theme.Panel
+    miniBtn.BorderSizePixel = 0
+    miniBtn.Text = "─"
+    miniBtn.TextColor3 = Theme.TextSecondary
+    miniBtn.AutoButtonColor = false
+    miniBtn.Font = TitleFont
+    miniBtn.TextSize = 14
+    miniBtn.Parent = titleFrame
+
+    local miniCorner = Create("UICorner")
+    miniCorner.CornerRadius = UDim.new(0, 8)
+    miniCorner.Parent = miniBtn
+
+    local tabFrame = Create("Frame")
+    tabFrame.Size = UDim2.new(1, 0, 0, 44)
+    tabFrame.Position = UDim2.new(0, 0, 0, 50)
+    tabFrame.BackgroundColor3 = Theme.Background
+    tabFrame.BorderSizePixel = 0
+    tabFrame.Parent = window
+
+    local tabStroke = Create("UIStroke")
+    tabStroke.Thickness = 1
+    tabStroke.Color = Theme.Border
+    tabStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    tabStroke.Parent = tabFrame
+
+    local tabList = Create("UIListLayout")
+    tabList.FillDirection = Enum.FillDirection.Horizontal
+    tabList.Padding = UDim.new(0, 4)
+    tabList.HorizontalAlignment = Enum.HorizontalAlignment.Left
+    tabList.VerticalAlignment = Enum.VerticalAlignment.Center
+    tabList.Parent = tabFrame
+
+    local tabPadding = Create("UIPadding")
+    tabPadding.PaddingLeft = UDim.new(0, Padding)
+    tabPadding.PaddingTop = UDim.new(0, 8)
+    tabPadding.Parent = tabFrame
+
+    local contentFrame = Create("Frame")
+    contentFrame.Size = UDim2.new(1, -Padding*2, 1, -130)
+    contentFrame.Position = UDim2.new(0, Padding, 0, 94)
+    contentFrame.BackgroundTransparency = 1
+    contentFrame.BorderSizePixel = 0
+    contentFrame.Parent = window
+
+    local scroll = Create("ScrollingFrame")
+    scroll.Size = UDim2.new(1, 0, 1, 0)
+    scroll.BackgroundTransparency = 1
+    scroll.BorderSizePixel = 0
+    scroll.ScrollBarThickness = 0
+    scroll.ScrollBarImageTransparency = 1
+    scroll.Parent = contentFrame
+
+    local scrollList = Create("UIListLayout")
+    scrollList.Padding = UDim.new(0, Padding)
+    scrollList.Parent = scroll
+
+    local padding2 = Create("UIPadding")
+    padding2.PaddingBottom = UDim.new(0, Padding)
+    padding2.Parent = scroll
+
+    local scrollPadding = Create("UIPadding")
+    scrollPadding.PaddingRight = UDim.new(0, 8)
+    scrollPadding.Parent = scroll
+
+    if Draggable then
+        MakeDraggable(titleFrame, window)
+    end
+
+    closeBtn.MouseButton1Click:Connect(function()
+        Tween(window, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+            Size = UDim2.new(0, 0, 0, 0),
+            Position = UDim2.new(0.5, 0, 0.5, 0),
+            AnchorPoint = Vector2.new(0.5, 0.5)
+        })
+        wait(0.2)
+        main:Destroy()
+    end)
+
+    local minimized = false
+    miniBtn.MouseButton1Click:Connect(function()
+        minimized = not minimized
+        if minimized then
+            Tween(window, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+                Size = UDim2.new(0, Size.X.Offset, 0, 50)
+            })
+        else
+            Tween(window, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+                Size = Size
+            })
+        end
+    end)
+
+    local windowObj = setmetatable({
+        Main = main,
+        Window = window,
+        Scroll = scroll,
+        TabFrame = tabFrame,
+        Tabs = {},
+        CurrentTab = nil
+    }, VoidUI)
+
+    windowObj:OpenTab(Title)
+    return windowObj
 end
 
 local TweenService = game:GetService("TweenService")
@@ -1232,4 +1400,8 @@ function VoidUI:GetWindow(config)
     return self:CreateWindow(config)
 end
 
-return VoidUI
+local function NewVoidUI(config)
+    return VoidUI:CreateWindow(config)
+end
+
+return NewVoidUI
