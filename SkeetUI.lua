@@ -144,6 +144,11 @@ function SkeetUI:CreateWatermark()
     })
     
     -- Username
+    local playerName = "User"
+    pcall(function()
+        playerName = game.Players.LocalPlayer.Name
+    end)
+    
     watermark.Username = CreateInstance("TextLabel", {
         Name = "Username",
         Parent = textContainer,
@@ -151,7 +156,7 @@ function SkeetUI:CreateWatermark()
         Size = UDim2.new(0, 0, 1, 0),
         AutomaticSize = Enum.AutomaticSize.X,
         Font = Enum.Font.Gotham,
-        Text = game.Players.LocalPlayer.Name,
+        Text = playerName,
         TextColor3 = Colors.Text,
         TextSize = 11,
         TextXAlignment = Enum.TextXAlignment.Left
@@ -226,8 +231,10 @@ function SkeetUI:CreateWatermark()
     -- Update Ping
     spawn(function()
         while wait(2) do
-            local ping = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
-            watermark.Ping.Text = ping
+            pcall(function()
+                local ping = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+                watermark.Ping.Text = ping
+            end)
         end
     end)
     
