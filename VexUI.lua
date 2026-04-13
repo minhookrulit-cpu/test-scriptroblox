@@ -148,12 +148,22 @@ end
 
 local function Create(class, props, children)
     local obj = Instance.new(class)
+    local fontValue = nil
     for k, v in pairs(props or {}) do
-        if k == "Font" and type(v) == "table" then
-            pcall(function() obj.Font = v end)
+        if k == "Font" then
+            fontValue = v
         elseif k ~= "Parent" and v ~= nil then
             obj[k] = v
         end
+    end
+    if fontValue then
+        pcall(function()
+            if type(fontValue) == "string" then
+                obj.Font = Enum.Font[fontValue] or Enum.Font.Gotham
+            else
+                obj.Font = fontValue
+            end
+        end)
     end
     for _, child in ipairs(children or {}) do
         child.Parent = obj
@@ -303,7 +313,7 @@ function RbxUI:CreateWindow(config)
         Size = UDim2.new(1, -100, 1, 0),
         Position = UDim2.new(0, 14, 0, 0),
         BackgroundTransparency = 1,
-        Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Bold),
+        Font = "GothamBold",
         Text = title,
         TextColor3 = theme.Text,
         TextSize = 14,
@@ -318,7 +328,7 @@ function RbxUI:CreateWindow(config)
         Size = UDim2.new(0, 60, 1, 0),
         Position = UDim2.new(0, 14 + #title * 8, 0, 0),
         BackgroundTransparency = 1,
-        Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Regular),
+        Font = "Gotham",
         Text = subtitle,
         TextColor3 = theme.TextMuted,
         TextSize = 11,
@@ -334,7 +344,7 @@ function RbxUI:CreateWindow(config)
         Position = UDim2.new(1, -36, 0, 7),
         BackgroundColor3 = theme.Surface2,
         BorderSizePixel = 0,
-        Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Bold),
+        Font = "GothamBold",
         Text = "×",
         TextColor3 = theme.TextMuted,
         TextSize = 18,
@@ -362,7 +372,7 @@ function RbxUI:CreateWindow(config)
         Position = UDim2.new(1, -68, 0, 7),
         BackgroundColor3 = theme.Surface2,
         BorderSizePixel = 0,
-        Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Bold),
+        Font = "GothamBold",
         Text = "−",
         TextColor3 = theme.TextMuted,
         TextSize = 16,
@@ -484,7 +494,7 @@ function RbxUI:CreateWindow(config)
             AutomaticSize = Enum.AutomaticSize.X,
             BackgroundColor3 = theme.TabInactive,
             BorderSizePixel = 0,
-            Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Medium),
+            Font = "Gotham",
             Text = (icon and icon.." " or "") .. tabName,
             TextColor3 = theme.TextMuted,
             TextSize = 12,
@@ -571,7 +581,7 @@ function RbxUI:CreateWindow(config)
                 Position = UDim2.new(0, 0, 0, 0),
                 BackgroundColor3 = theme.Background,
                 BorderSizePixel = 0,
-                Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Bold),
+                Font = "GothamBold",
                 Text = "  " .. sectionName:upper() .. "  ",
                 TextColor3 = theme.Accent,
                 TextSize = 10,
@@ -609,7 +619,7 @@ function RbxUI:CreateWindow(config)
                 Size = UDim2.new(1, -20, 1, 0),
                 Position = UDim2.new(0, 14, 0, 0),
                 BackgroundTransparency = 1,
-                Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Regular),
+                Font = "Gotham",
                 Text = text,
                 TextColor3 = theme.Text,
                 TextSize = 13,
@@ -688,7 +698,7 @@ function RbxUI:CreateWindow(config)
                 Size = UDim2.new(1, -60, 1, 0),
                 Position = UDim2.new(0, 14, 0, 0),
                 BackgroundTransparency = 1,
-                Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Regular),
+                Font = "Gotham",
                 Text = text,
                 TextColor3 = theme.Text,
                 TextSize = 13,
@@ -799,7 +809,7 @@ function RbxUI:CreateWindow(config)
             Create("TextLabel", {
                 Size = UDim2.new(1, -60, 1, 0),
                 BackgroundTransparency = 1,
-                Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Regular),
+                Font = "Gotham",
                 Text = text,
                 TextColor3 = theme.Text,
                 TextSize = 13,
@@ -811,7 +821,7 @@ function RbxUI:CreateWindow(config)
                 Size = UDim2.new(0, 55, 1, 0),
                 Position = UDim2.new(1, -55, 0, 0),
                 BackgroundTransparency = 1,
-                Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Bold),
+                Font = "GothamBold",
                 Text = tostring(default) .. suffix,
                 TextColor3 = theme.Accent,
                 TextSize = 12,
@@ -938,7 +948,7 @@ function RbxUI:CreateWindow(config)
                 Size = UDim2.new(0.6, 0, 1, 0),
                 Position = UDim2.new(0, 14, 0, 0),
                 BackgroundTransparency = 1,
-                Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Regular),
+                Font = "Gotham",
                 Text = text,
                 TextColor3 = theme.Text,
                 TextSize = 13,
@@ -951,7 +961,7 @@ function RbxUI:CreateWindow(config)
                 Size = UDim2.new(0.38, 0, 1, 0),
                 Position = UDim2.new(0.6, 0, 0, 0),
                 BackgroundTransparency = 1,
-                Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Medium),
+                Font = "Gotham",
                 Text = selected,
                 TextColor3 = theme.Accent,
                 TextSize = 12,
@@ -964,7 +974,7 @@ function RbxUI:CreateWindow(config)
                 Size = UDim2.new(0, 20, 1, 0),
                 Position = UDim2.new(1, -22, 0, 0),
                 BackgroundTransparency = 1,
-                Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Bold),
+                Font = "GothamBold",
                 Text = "▾",
                 TextColor3 = theme.TextMuted,
                 TextSize = 12,
@@ -1012,7 +1022,7 @@ function RbxUI:CreateWindow(config)
                 local Item = Create("TextButton", {
                     Size = UDim2.new(1, 0, 0, 30),
                     BackgroundTransparency = 1,
-                    Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Regular),
+                    Font = "Gotham",
                     Text = "  " .. opt,
                     TextColor3 = opt == selected and theme.Accent or theme.Text,
                     TextSize = 12,
@@ -1106,7 +1116,7 @@ function RbxUI:CreateWindow(config)
                 Size = UDim2.new(1, -60, 1, 0),
                 Position = UDim2.new(0, 14, 0, 0),
                 BackgroundTransparency = 1,
-                Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Regular),
+                Font = "Gotham",
                 Text = text,
                 TextColor3 = theme.Text,
                 TextSize = 13,
@@ -1207,7 +1217,7 @@ function RbxUI:CreateWindow(config)
                 Size = UDim2.new(1, 0, 0, 22),
                 Position = UDim2.new(0, 0, 0, 164),
                 BackgroundTransparency = 1,
-                Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Bold),
+                Font = "GothamBold",
                 Text = string.format("#%02X%02X%02X", math.round(r*255), math.round(g*255), math.round(b*255)),
                 TextColor3 = theme.TextMuted,
                 TextSize = 11,
@@ -1312,7 +1322,7 @@ function RbxUI:CreateWindow(config)
                 Size = UDim2.new(0.45, 0, 1, 0),
                 Position = UDim2.new(0, 14, 0, 0),
                 BackgroundTransparency = 1,
-                Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Regular),
+                Font = "Gotham",
                 Text = text,
                 TextColor3 = theme.Text,
                 TextSize = 13,
@@ -1326,7 +1336,7 @@ function RbxUI:CreateWindow(config)
                 Position = UDim2.new(0.5, 0, 0.5, -12),
                 BackgroundColor3 = theme.Surface2,
                 BorderSizePixel = 0,
-                Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Regular),
+                Font = "Gotham",
                 Text = "",
                 PlaceholderText = placeholder or "Enter value...",
                 PlaceholderColor3 = theme.TextMuted,
@@ -1373,7 +1383,7 @@ function RbxUI:CreateWindow(config)
                 Size = UDim2.new(1, -80, 1, 0),
                 Position = UDim2.new(0, 14, 0, 0),
                 BackgroundTransparency = 1,
-                Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Regular),
+                Font = "Gotham",
                 Text = text,
                 TextColor3 = theme.Text,
                 TextSize = 13,
@@ -1387,7 +1397,7 @@ function RbxUI:CreateWindow(config)
                 Position = UDim2.new(1, -74, 0.5, -12),
                 BackgroundColor3 = theme.Surface2,
                 BorderSizePixel = 0,
-                Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Bold),
+                Font = "GothamBold",
                 Text = key.Name,
                 TextColor3 = theme.Accent,
                 TextSize = 11,
@@ -1431,7 +1441,7 @@ function RbxUI:CreateWindow(config)
             local Lbl = Create("TextLabel", {
                 Size = UDim2.new(1, 0, 0, 24),
                 BackgroundTransparency = 1,
-                Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Regular),
+                Font = "Gotham",
                 Text = text,
                 TextColor3 = theme.TextMuted,
                 TextSize = 12,
@@ -1532,7 +1542,7 @@ function RbxUI:CreateWindow(config)
             Size = UDim2.new(1, -20, 0, 20),
             Position = UDim2.new(0, 14, 0, 10),
             BackgroundTransparency = 1,
-            Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Bold),
+            Font = "GothamBold",
             Text = title,
             TextColor3 = theme.Text,
             TextSize = 13,
@@ -1544,7 +1554,7 @@ function RbxUI:CreateWindow(config)
             Size = UDim2.new(1, -20, 0, 30),
             Position = UDim2.new(0, 14, 0, 30),
             BackgroundTransparency = 1,
-            Font = Font.new("rbxassetid://12289867853", Enum.FontWeight.Regular),
+            Font = "Gotham",
             Text = message,
             TextColor3 = theme.TextMuted,
             TextSize = 12,
