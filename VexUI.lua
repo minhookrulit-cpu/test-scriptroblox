@@ -728,7 +728,7 @@ local function getFont(name)
     return Font.new(VexUI.Fonts[name], Enum.FontStyle.Normal)
 end
 
-VexUI:GetFont = getFont
+VexUI.GetFont = getFont
 
 VexUI:Initialize()
 
