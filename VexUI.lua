@@ -1,10 +1,10 @@
 local VexUI = {}
 
 VexUI.Fonts = {
-    Inter = "rbxassetid://12187348397",
-    Poppins = "rbxassetid://11714050028",
-    Satoshi = "rbxassetid://11702720882",
-    Rajdhani = "rbxassetid://11747315117"
+    Inter = Font.new("rbxassetid://12187348397", Enum.FontStyle.Normal),
+    Poppins = Font.new("rbxassetid://11714050028", Enum.FontStyle.Normal),
+    Satoshi = Font.new("rbxassetid://11702720882", Enum.FontStyle.Normal),
+    Rajdhani = Font.new("rbxassetid://11747315117", Enum.FontStyle.Normal)
 }
 
 VexUI.DefaultTheme = {
@@ -70,7 +70,7 @@ function VexUI:CreateButton(config)
     button.BackgroundColor3 = self.CurrentTheme.Primary
     button.Text = config.Text or "Button"
     button.TextColor3 = Color3.new(1, 1, 1)
-    button.Font = self.Fonts.Poppins
+    button.Font = getFont("Poppins")
     button.TextSize = 14
     button.AutoButtonColor = false
     button.BorderSizePixel = 0
@@ -144,7 +144,7 @@ function VexUI:CreateToggle(config)
     label.BackgroundTransparency = 1
     label.Text = config.Text or "Toggle"
     label.TextColor3 = self.CurrentTheme.Text
-    label.Font = self.Fonts.Poppins
+    label.Font = getFont("Poppins")
     label.TextSize = 14
     label.TextXAlignment = Enum.TextXAlignment.Left
     label.ZIndex = 1
@@ -225,7 +225,7 @@ function VexUI:CreateSlider(config)
     label.BackgroundTransparency = 1
     label.Text = config.Text or "Slider"
     label.TextColor3 = self.CurrentTheme.Text
-    label.Font = self.Fonts.Poppins
+    label.Font = getFont("Poppins")
     label.TextSize = 14
     label.TextXAlignment = Enum.TextXAlignment.Left
     label.ZIndex = 1
@@ -237,7 +237,7 @@ function VexUI:CreateSlider(config)
     valueLabel.BackgroundTransparency = 1
     valueLabel.Text = tostring(config.Min or 0)
     valueLabel.TextColor3 = self.CurrentTheme.TextSecondary
-    valueLabel.Font = self.Fonts.Poppins
+    valueLabel.Font = getFont("Poppins")
     valueLabel.TextSize = 12
     valueLabel.TextXAlignment = Enum.TextXAlignment.Right
     valueLabel.ZIndex = 1
@@ -325,7 +325,7 @@ function VexUI:CreateColorPicker(config)
     label.BackgroundTransparency = 1
     label.Text = config.Text or "Color"
     label.TextColor3 = self.CurrentTheme.Text
-    label.Font = self.Fonts.Poppins
+    label.Font = getFont("Poppins")
     label.TextSize = 14
     label.TextXAlignment = Enum.TextXAlignment.Left
     label.ZIndex = 1
@@ -337,7 +337,7 @@ function VexUI:CreateColorPicker(config)
     hexLabel.BackgroundTransparency = 1
     hexLabel.Text = "#FF0000"
     hexLabel.TextColor3 = self.CurrentTheme.TextSecondary
-    hexLabel.Font = self.Fonts.Poppins
+    hexLabel.Font = getFont("Poppins")
     hexLabel.TextSize = 12
     hexLabel.TextXAlignment = Enum.TextXAlignment.Right
     hexLabel.ZIndex = 1
@@ -432,7 +432,7 @@ function VexUI:CreateInput(config)
     label.BackgroundTransparency = 1
     label.Text = config.Text or "Input"
     label.TextColor3 = self.CurrentTheme.TextSecondary
-    label.Font = self.Fonts.Poppins
+    label.Font = getFont("Poppins")
     label.TextSize = 12
     label.TextXAlignment = Enum.TextXAlignment.Left
     label.ZIndex = 1
@@ -446,7 +446,7 @@ function VexUI:CreateInput(config)
     textBox.PlaceholderText = config.Placeholder or "Enter text..."
     textBox.PlaceholderColor3 = self.CurrentTheme.TextSecondary
     textBox.TextColor3 = self.CurrentTheme.Text
-    textBox.Font = self.Fonts.Poppins
+    textBox.Font = getFont("Poppins")
     textBox.TextSize = 14
     textBox.TextXAlignment = Enum.TextXAlignment.Left
     textBox.ZIndex = 1
@@ -478,7 +478,7 @@ function VexUI:CreateDropdown(config)
     label.BackgroundTransparency = 1
     label.Text = config.Text or "Dropdown"
     label.TextColor3 = self.CurrentTheme.TextSecondary
-    label.Font = self.Fonts.Poppins
+    label.Font = getFont("Poppins")
     label.TextSize = 12
     label.TextXAlignment = Enum.TextXAlignment.Left
     label.ZIndex = 1
@@ -490,7 +490,7 @@ function VexUI:CreateDropdown(config)
     selectedLabel.BackgroundTransparency = 1
     selectedLabel.Text = config.Options[1] or "Select..."
     selectedLabel.TextColor3 = self.CurrentTheme.Text
-    selectedLabel.Font = self.Fonts.Poppins
+    selectedLabel.Font = getFont("Poppins")
     selectedLabel.TextSize = 14
     selectedLabel.TextXAlignment = Enum.TextXAlignment.Left
     selectedLabel.ZIndex = 1
@@ -502,7 +502,7 @@ function VexUI:CreateDropdown(config)
     arrow.BackgroundTransparency = 1
     arrow.Text = "▼"
     arrow.TextColor3 = self.CurrentTheme.TextSecondary
-    arrow.Font = self.Fonts.Poppins
+    arrow.Font = getFont("Poppins")
     arrow.TextSize = 10
     arrow.ZIndex = 1
     arrow.Parent = dropdown
@@ -533,7 +533,7 @@ function VexUI:CreateDropdown(config)
                     optionBtn.BackgroundTransparency = 1
                     optionBtn.Text = option
                     optionBtn.TextColor3 = self.CurrentTheme.Text
-                    optionBtn.Font = self.Fonts.Poppins
+                    optionBtn.Font = getFont("Poppins")
                     optionBtn.TextSize = 14
                     optionBtn.TextXAlignment = Enum.TextXAlignment.Left
                     optionBtn.ZIndex = 101
@@ -606,7 +606,7 @@ function VexUI:CreateWindow(config)
     title.BackgroundTransparency = 1
     title.Text = config.Title or "VexUI"
     title.TextColor3 = self.CurrentTheme.Text
-    title.Font = self.Fonts.Poppins
+    title.Font = getFont("Poppins")
     title.TextSize = 18
     title.TextXAlignment = Enum.TextXAlignment.Left
     title.ZIndex = 1
@@ -619,7 +619,7 @@ function VexUI:CreateWindow(config)
     closeBtn.BackgroundTransparency = 1
     closeBtn.Text = "✕"
     closeBtn.TextColor3 = self.CurrentTheme.TextSecondary
-    closeBtn.Font = self.Fonts.Poppins
+    closeBtn.Font = getFont("Poppins")
     closeBtn.TextSize = 16
     closeBtn.ZIndex = 1
     closeBtn.Parent = titleBar
@@ -665,7 +665,7 @@ function VexUI:CreateSection(parent, title)
     titleLabel.BackgroundTransparency = 1
     titleLabel.Text = title or "Section"
     titleLabel.TextColor3 = self.CurrentTheme.Primary
-    titleLabel.Font = self.Fonts.Poppins
+    titleLabel.Font = getFont("Poppins")
     titleLabel.TextSize = 12
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
     titleLabel.ZIndex = 1
@@ -688,7 +688,7 @@ function VexUI:CreateLabel(config)
     label.BackgroundTransparency = 1
     label.Text = config.Text or "Label"
     label.TextColor3 = self.CurrentTheme.Text
-    label.Font = self.Fonts.Poppins
+    label.Font = getFont("Poppins")
     label.TextSize = config.TextSize or 14
     label.TextXAlignment = config.Alignment or Enum.TextXAlignment.Left
     label.ZIndex = 1
@@ -696,6 +696,12 @@ function VexUI:CreateLabel(config)
 
     return label
 end
+
+local function getFont(name)
+    return Font.new(VexUI.Fonts[name], Enum.FontStyle.Normal)
+end
+
+VexUI:GetFont = getFont
 
 VexUI:Initialize()
 
